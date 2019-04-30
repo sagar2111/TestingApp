@@ -12,7 +12,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 /**
- * @author JavaSolutionsGuide
+ * @author sagar
  *
  */
 @Entity
