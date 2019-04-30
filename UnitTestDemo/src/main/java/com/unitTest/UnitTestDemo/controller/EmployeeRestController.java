@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.unitTest.UnitTestDemo.DTO.Response;
 import com.unitTest.UnitTestDemo.entity.Employee;
 import com.unitTest.UnitTestDemo.service.EmployeeService;
 
@@ -34,6 +35,12 @@ public class EmployeeRestController {
 
 	public void setEmployeeService(EmployeeService employeeService) {
 		this.employeeService = employeeService;
+	}
+	@ApiOperation(value = "Get an employee by Id")
+	@GetMapping("/api/employees/{employeeId}")
+	public Response getEmployeeResponse(
+			@ApiParam(value = "Employee id from which employee object will retrieve", required = true) @PathVariable(name = "employeeId") Long employeeId) {
+		return employeeService.getEmployeeResponse(employeeId);
 	}
 
 	@ApiOperation(value = "Get an employee by Id")

@@ -2,6 +2,7 @@ package com.unitTest.UnitTestDemo.service;
 
 import java.util.List;
 
+import com.unitTest.UnitTestDemo.DTO.Response;
 import com.unitTest.UnitTestDemo.entity.Employee;
 
 /**
@@ -17,4 +18,6 @@ public interface EmployeeService {
 	public int deleteEmployee(Long employeeId);
 
 	public String updateEmployee(Employee employee);
+
+	public Response getEmployeeResponse(Long employeeId);
 }
