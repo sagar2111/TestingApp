@@ -3,6 +3,8 @@ package com.unitTest.UnitTestDemo;
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.when; // ...or...
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 import org.junit.Test;
@@ -11,13 +13,16 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 
+import com.unitTest.UnitTestDemo.DTO.EmployeeRequest;
+import com.unitTest.UnitTestDemo.DTO.EmployeeResponse;
 import com.unitTest.UnitTestDemo.entity.Employee;
 import com.unitTest.UnitTestDemo.repository.EmployeeRepository;
 import com.unitTest.UnitTestDemo.service.EmployeeService;
 import com.unitTest.UnitTestDemo.service.EmployeeServiceImpl;
 
 import junit.framework.Assert;
-
+import lombok.extern.slf4j.Slf4j;
+@Slf4j
 @RunWith(MockitoJUnitRunner.class)
 public class EmployeeServiceImplTest {
 
@@ -69,6 +74,39 @@ public class EmployeeServiceImplTest {
 	    mockEmployeeService.deleteEmployee(1L);
 	   //verify(employeeRepository, times(1)).delete(dummyEmployee.getId());
 
+
+	}
+	
+	@Test
+	public void saveEmployeeRequset() {
+		
+		EmployeeRequest emprequest=new EmployeeRequest();
+		EmployeeResponse empresponse=new EmployeeResponse();
+		List<Employee> employees=new ArrayList<>();
+		Employee dummyEmployee =  new Employee(1L, "sagar_result", 20000, "Comp");
+		employees.add(dummyEmployee);
+		emprequest.setEmpList(employees);
+		Employee inputEmployee =  new Employee(1L, "sagar_result", 20000, "Comp");
+		//List<Employee> inputEmployee = (List<Employee>) new Employee(null, "sagar", 20000, "Comp");
+		//empresponse.setEmpList(inputEmployee);
+		when(employeeRepository.save(inputEmployee)).thenReturn(employees.get(0));
+		EmployeeResponse resultEmployeeres = mockEmployeeService.saveEmployeeRequest(emprequest);
+		log.debug("Result Employee iss "+resultEmployeeres.getStatusDescription());
+		String Expectedresult=resultEmployeeres.getStatusDescription();
+		assertEquals("Execution Successfull.", Expectedresult);
+	}
+	
+	@Test
+	public void getEmployeeEmployeeResponse() {
+		EmployeeRequest emprequest=new EmployeeRequest();
+		EmployeeResponse empresponse=new EmployeeResponse();
+		Long employeeId = 1L;
+		Employee emp2 = new Employee(employeeId, "ABC", 423534, "fsd");
+		when(employeeRepository.findById(1L)).thenReturn(createTestEntity());
+		EmployeeResponse resultEmployee = mockEmployeeService.getEmployeeResponse(employeeId);
+		// Assert.assertEquals(1L,actual.getId());
+		assertEquals(new Long(1), resultEmployee.getEmpList().get(0).getId());
+		Assert.assertNotNull(resultEmployee);
 
 	}
 

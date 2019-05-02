@@ -2,7 +2,8 @@ package com.unitTest.UnitTestDemo.service;
 
 import java.util.List;
 
-import com.unitTest.UnitTestDemo.DTO.Response;
+import com.unitTest.UnitTestDemo.DTO.EmployeeRequest;
+import com.unitTest.UnitTestDemo.DTO.EmployeeResponse;
 import com.unitTest.UnitTestDemo.entity.Employee;
 
 /**
@@ -19,5 +20,10 @@ public interface EmployeeService {
 
 	public String updateEmployee(Employee employee);
 
-	public Response getEmployeeResponse(Long employeeId);
+	public EmployeeResponse getEmployeeResponse(Long employeeId);
+	
+
+	public EmployeeResponse saveEmployeeRequest(EmployeeRequest EmployeeRequest);
+
+	public Integer getEmployeeIdInt(Long employeeId);
 }
