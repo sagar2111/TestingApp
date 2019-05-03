@@ -81,6 +81,8 @@ public class EmployeeRestController {
 			@ApiParam(value = "Employee object store in database table", required = true) @Valid @RequestBody EmployeeRequest request) {
 		EmployeeResponse employeeResponse=new EmployeeResponse();
 		employeeResponse=employeeService.saveEmployeeRequest(request);
+		String message=employeeService.sendMessage(request.getEmpList().get(0));
+		employeeResponse.setMessage(message);
 		log.debug("Employee Saved Successfully");
 		return employeeResponse;
 	}

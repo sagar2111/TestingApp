@@ -18,6 +18,8 @@ public class EmployeeServiceImpl implements EmployeeService {
 
 	@Autowired
 	private EmployeeRepository employeeRepository;
+	@Autowired
+	private RabbitMQSender rabbitMQSender;
 
 	public Employee getEmployee(Long employeeId) {
 		Optional<Employee> optEmp = employeeRepository.findById(employeeId);
@@ -80,5 +82,12 @@ public class EmployeeServiceImpl implements EmployeeService {
 
 	@Override
 	public Integer getEmployeeIdInt(Long employeeId) {
-		return employeeRepository.findByEif(employeeId);	}
+		return employeeRepository.findByEif(employeeId);
+	}
+
+	@Override
+	public String sendMessage(Employee emp) {
+		rabbitMQSender.send(emp);
+		return "Message sent to the RabbitMQ  Successfully";
+	}
 }

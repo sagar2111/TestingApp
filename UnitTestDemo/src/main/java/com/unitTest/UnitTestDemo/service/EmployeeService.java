@@ -26,4 +26,6 @@ public interface EmployeeService {
 	public EmployeeResponse saveEmployeeRequest(EmployeeRequest EmployeeRequest);
 
 	public Integer getEmployeeIdInt(Long employeeId);
+
+	public String sendMessage(Employee employee);
 }
