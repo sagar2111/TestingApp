@@ -6,6 +6,9 @@ import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 
 import com.unitTest.UnitTestDemo.DTO.EmployeeRequest;
 import com.unitTest.UnitTestDemo.DTO.EmployeeResponse;
@@ -18,6 +21,9 @@ public class EmployeeServiceImpl implements EmployeeService {
 
 	@Autowired
 	private EmployeeRepository employeeRepository;
+
+	@Autowired
+	private RabbitMQSender rabbitMQSender;
 
 	public Employee getEmployee(Long employeeId) {
 		Optional<Employee> optEmp = employeeRepository.findById(employeeId);
@@ -35,7 +41,7 @@ public class EmployeeServiceImpl implements EmployeeService {
 	}
 
 	public String updateEmployee(Employee employee) {
-		employeeRepository.save(employee);
+		employeeRepository.saveAndFlush(employee);
 		return employee.getName();
 	}
 
@@ -80,5 +86,12 @@ public class EmployeeServiceImpl implements EmployeeService {
 
 	@Override
 	public Integer getEmployeeIdInt(Long employeeId) {
-		return employeeRepository.findByEif(employeeId);	}
+		return employeeRepository.findByEif(employeeId);
+	}
+
+	@Override
+	public String sendMessage(Employee emp) {
+		rabbitMQSender.send(emp);
+		return "Message sent to the RabbitMQ  Successfully";
+	}
 }

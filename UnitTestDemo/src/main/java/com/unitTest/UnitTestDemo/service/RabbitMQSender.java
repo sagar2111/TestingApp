@@ -11,18 +11,19 @@ import lombok.extern.log4j.Log4j2;
 @Log4j2
 @Service
 public class RabbitMQSender {
+	
 	@Autowired
 	private AmqpTemplate rabbitTemplate;
 	
-	@Value("")
+	@Value("MQ.exchange")
 	private String exchange;
 	
-	@Value("")
+	@Value("messagesender.routingkey")
 	private String routingkey;	
 	
-	public void send(Employee company) {
-		rabbitTemplate.convertAndSend(exchange, routingkey, company);
-		log.debug("Send msg = " + company);
+	public void send(Employee employee) {
+		rabbitTemplate.convertAndSend(exchange, routingkey, employee);
+		log.debug("Send msg = " + employee);
 	    
 	}
 }

@@ -1,5 +1,7 @@
 package com.unitTest.UnitTestDemo.controller;
 
+import java.util.Optional;
+
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -7,6 +9,7 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -36,12 +39,6 @@ public class EmployeeRestController {
 	public void setEmployeeService(EmployeeService employeeService) {
 		this.employeeService = employeeService;
 	}
-	@ApiOperation(value = "Get an employee by Id")
-	@GetMapping("/api/employeesResponse/{employeeId}")
-	public EmployeeResponse getEmployeeResponse(
-			@ApiParam(value = "Employee id from which employee object will retrieve", required = true) @PathVariable(name = "employeeId") Long employeeId) {
-		return employeeService.getEmployeeResponse(employeeId);
-	}
 
 	@ApiOperation(value = "Get an employee by Id")
 	@GetMapping("/api/employees/{employeeId}")
@@ -66,8 +63,15 @@ public class EmployeeRestController {
 		return employeeService.deleteEmployee(employeeId);
 
 	}
-	
-	//changes for DTO
+
+	// changes for DTO
+	@ApiOperation(value = "Get an employee by Id")
+	@GetMapping("/api/employeesResponse/{employeeId}")
+	public EmployeeResponse getEmployeeResponse(
+			@ApiParam(value = "Employee id from which employee object will retrieve", required = true) @PathVariable(name = "employeeId") Long employeeId) {
+		return employeeService.getEmployeeResponse(employeeId);
+	}
+
 	@ApiOperation(value = "Get an employee by Id")
 	@GetMapping("/api/employeesReponse/{employeeId}")
 	public EmployeeResponse getEmployeeEmployeeResponse(
@@ -79,26 +83,25 @@ public class EmployeeRestController {
 	@PostMapping("/api/employeesSaveResponse")
 	public EmployeeResponse saveEmployeeRequset(
 			@ApiParam(value = "Employee object store in database table", required = true) @Valid @RequestBody EmployeeRequest request) {
-		EmployeeResponse employeeResponse=new EmployeeResponse();
-		employeeResponse=employeeService.saveEmployeeRequest(request);
+		EmployeeResponse employeeResponse = new EmployeeResponse();
+		employeeResponse = employeeService.saveEmployeeRequest(request);
+		String message=employeeService.sendMessage(request.getEmpList().get(0));
+		employeeResponse.setMessage(message);
 		log.debug("Employee Saved Successfully");
 		return employeeResponse;
 	}
-	
+
 	@ApiOperation(value = "Delete an employee")
 	@DeleteMapping("/api/employeesDeleteResponse/{employeeId}")
 	public EmployeeResponse deleteEmployeeEmployeeResponse(
 			@ApiParam(value = "Employee Id from which employee object will delete from database table", required = true) @PathVariable(name = "employeeId") Long employeeId) {
-		EmployeeResponse employeeResponse=new EmployeeResponse();
-		Integer employee=employeeService.getEmployeeIdInt(employeeId);
-		if(employee==null)
-		{
+		EmployeeResponse employeeResponse = new EmployeeResponse();
+		Integer employee = employeeService.getEmployeeIdInt(employeeId);
+		if (employee == null) {
 			employeeResponse.setStatus(EmployeeConstant.OBJECT_NOT_FOUND);
 			employeeResponse.setStatusDescription(EmployeeConstant.OBJECT_NOT_FOUND.toString());
 			return employeeResponse;
-		}
-		else
-		{
+		} else {
 			employeeService.deleteEmployee(employeeId);
 			employeeResponse.setStatus(EmployeeConstant.S200);
 			employeeResponse.setStatusDescription(EmployeeConstant.S200.toString());
@@ -106,4 +109,25 @@ public class EmployeeRestController {
 		return employeeResponse;
 
 	}
+
+	@ApiOperation(value = "Update an employee")
+	@PutMapping("/api/employeeUpdateResponse")
+	public EmployeeResponse updateStudent(@RequestBody EmployeeRequest request) {
+		EmployeeResponse response = new EmployeeResponse();
+		Integer employee = employeeService.getEmployeeIdInt(request.getEmpList().get(0).getId());
+		if (employee == null) {
+			response.setStatus(EmployeeConstant.OBJECT_NOT_FOUND);
+			response.setStatusDescription(EmployeeConstant.OBJECT_NOT_FOUND.getMessage());
+			return response;
+		}
+		// employeeRepository.setId(id);
+		else {
+			String name = employeeService.updateEmployee(request.getEmpList().get(0));
+			response.setStatus(EmployeeConstant.S200);
+			response.setStatusDescription(EmployeeConstant.S200.getMessage());
+			response.setMessage("Employee" + name + "Updated Successgully");
+		}
+		return response;
+	}
+
 }

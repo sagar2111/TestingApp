@@ -1,16 +1,12 @@
 package com.unitTest.UnitTestDemo;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertThat;
-import org.apache.coyote.http11.Http11AprProtocol;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.Mockito;
-import org.mockito.junit.MockitoJUnitRunner;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
